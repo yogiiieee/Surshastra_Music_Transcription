@@ -39,4 +39,4 @@ def song_xml():
     return send_file(xml_file_path, as_attachment=True)
 
 if __name__ == '__main__':
-    app.run()
+    app.run(debug=True)

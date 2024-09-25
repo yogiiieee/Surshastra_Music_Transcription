@@ -68,13 +68,24 @@ def generate_sine_midi_note(f0_info, fs, n_duration, tempo, cqt_dB, metronome_ma
         # note_info = Rest(type='quarter')
         f0 = 0
     else:
+        # midi_note = round(librosa.hz_to_midi(f0))
+        # if metronome_mark_type != 'inexpressible':
+        #     note = Note(librosa.midi_to_note(midi_note).replace('♯','#'), type=metronome_mark_type)
+        # else:
+        #     note = Note(librosa.midi_to_note(midi_note).replace('♯','#'), type='quarter')
+        #     note.duration.dots = 2
+        # note = Note(librosa.midi_to_note(midi_note).replace('♯','#'), type='quarter')
+        # note.volume.velocity = midi_velocity
         midi_note = round(librosa.hz_to_midi(f0))
         if metronome_mark_type != 'inexpressible':
+            if metronome_mark_type in ['12th', 'sixteenth', '32nd', '64th']:
+                metronome_mark_type = 'eighth'
             note = Note(librosa.midi_to_note(midi_note).replace('♯','#'), type=metronome_mark_type)
+            # note.duration.dots = 1
         else:
             note = Note(librosa.midi_to_note(midi_note).replace('♯','#'), type='quarter')
+            # note.duration.dots = 1
             note.duration.dots = 2
-        # note = Note(librosa.midi_to_note(midi_note).replace('♯','#'), type='quarter')
         note.volume.velocity = midi_velocity
         note_info = [note]
     midi_info = [midi_note, midi_duration, midi_velocity]
@@ -99,6 +110,11 @@ def estimate_pitch_and_notes(x, onset_boundaries, i, fs, tempo, cqt_dB, metronom
     f0_info = estimate_pitch(np.mean(x[:, n0:n1], axis=1), threshold=g.cqt_threshold)
     return generate_sine_midi_note(f0_info, fs, n1-n0, tempo, cqt_dB, metronome_mark)
 
+def increase_volume(stream_obj, velocity_increase=20):
+    for note in stream_obj.flat.notes:
+        if note.volume.velocity is not None:
+            note.volume.velocity = min(note.volume.velocity + velocity_increase, 127)
+
 def main():
     filename = 'file.wav'
     x, fs = librosa.load(filename, sr=None, mono=True)
@@ -108,6 +124,9 @@ def main():
 
     tempo, beats = librosa.beat.beat_track(y=None, sr=fs, onset_envelope=onsets[2], hop_length=g.hop_length,
                                            tightness=100, trim=True, bpm=None, units='frames')
+    print(tempo)
+    if isinstance(tempo, np.ndarray):
+        tempo = tempo.item()
     tempo = int(2*round(tempo/2))
     metronome_mark = MetronomeMark(referent='quarter', number=tempo)
 
@@ -138,6 +157,7 @@ def main():
         s.append(notes)
     key = s.analyze('key')
     s.insert(0, key)
+    increase_volume(s)
     s.write('musicxml', fp='downloads/song.xml')
     print(f"MusicXML file 'song.xml' generated successfully.")
     s.write('midi', fp='downloads/recording.mid')
@@ -145,7 +165,7 @@ def main():
     with open('downloads/notes.txt', 'w') as file:
         for note in note_info:
             if isinstance(note, list):
-                file.write(f"{note[0].name}\n")
+                file.write(f"{note[0].nameWithOctave}\n")
             else:
                 file.write(f"{note.name}\n")
     
