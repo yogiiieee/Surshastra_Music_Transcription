@@ -70,12 +70,13 @@
         <div style="display: flex;">
             <div style="width: 50%;">
                 <p>
-                    The Surshastra website is a platform designed for music enthusiasts and professionals to interact
-                    with audio files in a musical context. Users can upload .wav audio files to the website, where the
-                    files are analyzed using advanced audio processing techniques, including Constant-Q Transform (CQT)
-                    and onset detection for rhythm analysis. Additionally, users can download the processed data in
-                    various formats, including MusicXML, MIDI, and sheet music, allowing for further exploration and
-                    utilization of the musical content.
+                    SurShastra is a cutting-edge platform for music enthusiasts, educators, and professionals 
+                    to analyze and transcribe audio files with advanced AI-powered techniques. Users can upload 
+                    .mp3 and other supported audio formats to extract musical information, including automatic 
+                    note transcription, pitch detection, and rhythm analysis using Mel spectrograms, onset detection, 
+                    and deep learning models. The system supports exporting the processed data in multiple formats 
+                    such as MusicXML, MIDI, and sheet music, enabling seamless integration into digital music workstations 
+                    and notation software for further exploration and creativity.
                 </p>
             </div>
             <div style="width: 50%;">
@@ -111,11 +112,11 @@
                                 style="font-size: 70px; color: skyblue; margin-right: 30px;"></i>
                         </div>
                         <div>
-                            <h5>Enter the file in .wav format</h5>
+                            <h5>Enter the file in .mp3 format</h5>
                             <label for="file-upload" class="file-label">
                                 <span>Choose File</span>
-                                <input type="file" id="file-upload" name="file-upload" style="display: none;"
-                                    accept=".wav" onchange="updateFileName()">
+                                <!-- <input type="file" id="file-upload" name="file-upload" style="display: none;" accept=".mp3" onchange="updateFileName()"> -->
+                                <input type="file" id="file-upload" name="file-upload" style="display: none;" onchange="updateFileName()">
                             </label>
                             <div id="selected-file"></div>
                         </div>

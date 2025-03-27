@@ -2,7 +2,8 @@ from flask import Flask, render_template, request, send_file
 from piano_transcription_inference import PianoTranscription, sample_rate, load_audio
 import os
 import subprocess
-from music21 import stream, note, converter
+from music21 import stream, note, converter, chord
+from tabulate import tabulate
 
 app = Flask(__name__)
 app.secret_key = 'SurShastra'
@@ -25,44 +26,75 @@ def upload():
             midi_file_path = os.path.join(download_folder, 'transcribed.mid')
             transcriptor.transcribe(audio, midi_file_path)
 
-            # Load MIDI into music21 and extract notes
+            # Process MIDI file
             midi_score = converter.parse(midi_file_path)
-            note_info = []
+            full_score = stream.Score()
+            
+            # Prepare data for tabulate
+            table_data = []
+            headers = ["Note", "Start", "Duration", "Octave", "Type"]
+            
             for part in midi_score.parts:
-                for element in part.flat.notes:
-                    if isinstance(element, note.Note) or isinstance(element, note.Rest):
-                        note_info.append(element)
-
-            # Generate additional files
-            s = stream.Score()
+                new_part = stream.Part()
+                for element in part.flat.notesAndRests:
+                    new_part.append(element)
+                    
+                    # Extract note information
+                    if isinstance(element, note.Note):
+                        row = [
+                            element.pitch.name,
+                            element.offset,
+                            element.duration.quarterLength,
+                            element.pitch.octave,
+                            "Note"
+                        ]
+                    elif isinstance(element, chord.Chord):
+                        row = [
+                            '.'.join(p.nameWithOctave for p in element.pitches),
+                            element.offset,
+                            element.duration.quarterLength,
+                            '-',
+                            "Chord"
+                        ]
+                    elif isinstance(element, note.Rest):
+                        row = [
+                            "Rest",
+                            element.offset,
+                            element.duration.quarterLength,
+                            '-',
+                            "Rest"
+                        ]
+                    table_data.append(row)
+                    
+                full_score.append(new_part)
+            
+            # Generate notes file with tabulate
             notes_file_path = os.path.join(download_folder, 'notes.txt')
-            with open(notes_file_path, 'w') as file:
-                for n in note_info:
-                    if isinstance(n, note.Note):
-                        pitch = n.nameWithOctave
-                    else:
-                        pitch = 'Rest'
-                    s.append(n)
-                    file.write(f"{pitch}\n")
-
-            s.write('musicxml', fp=os.path.join(download_folder, 'song.xml'))
-            print("MusicXML file 'song.xml' generated successfully.")
+            with open(notes_file_path, 'w') as f:
+                # Create formatted table
+                formatted_table = tabulate(
+                    table_data, 
+                    headers=headers, 
+                    tablefmt="grid",  
+                    floatfmt=".2f" 
+                )
+                f.write("Extracted Notes Information:\n\n")
+                f.write(formatted_table)
+                f.write("\n\n=== Additional Information ===\n")
+                f.write(f"Total notes: {len(table_data)}\n")
+                f.write(f"Time signature: {midi_score.flat.getTimeSignatures()[0] if midi_score.flat.getTimeSignatures() else 'Not specified'}\n")
+                f.write(f"Key signature: {midi_score.flat.getKeySignatures()[0] if midi_score.flat.getKeySignatures() else 'Not specified'}\n")
             
-            # notes_file_path = os.path.join(download_folder, 'notes.txt')
-            # with open(notes_file_path, 'w') as file:
-            #     for note in note_info:
-            #         if isinstance(note, list):
-            #             file.write(f"{note[0].nameWithOctave}\n")
-            #         else:
-            #             file.write(f"{note.name}\n")
+            # Generate MusicXML and PDF
+            musicxml_path = os.path.join(download_folder, 'sheet.xml')
+            full_score.write('musicxml', fp=musicxml_path)
             
-            # Generate PDF using MuseScore
-            command = ['C:/Program Files/MuseScore 4/bin/MuseScore4.exe', '-o', 'sheet.pdf', 'song.xml']
+            command = ['C:/Program Files/MuseScore 4/bin/MuseScore4.exe', '-o', 'sheet.pdf', 'sheet.xml']
             subprocess.run(command, cwd=download_folder)
-    
+            
             return render_template('download.html')
-    
-    return render_template('index.html')
+
+        return render_template('index.html')
 
 @app.route('/recording_mid')
 def download_midi():
