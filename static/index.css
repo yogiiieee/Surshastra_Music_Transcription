@@ -1,0 +1,271 @@
+html {
+    scroll-behavior: smooth;
+}
+
+body {
+    margin: 0px 0px;
+    padding: 0px 0px;
+    background-color: rgb(212, 217, 227);
+}
+
+#loading {
+    height: 100px;
+    background-color: rgb(0, 187, 0);
+    color: white;
+    display: flex;
+    justify-content: center; 
+    align-items: center; 
+    border-bottom: 2px solid white;
+    font-family: Verdana, Geneva, Tahoma, sans-serif;
+}
+
+#loading h2 {
+    margin-left: 10px; 
+    font-weight: lighter;
+}
+
+.spinner {
+    width: 30px;
+    height: 30px;
+    border: 5px solid #f3f3f3;
+    border-radius: 50%;
+    border-top: 5px solid #3498db;
+    animation: spin 2s linear infinite;
+    margin-right: 10px; 
+}
+
+#loading {
+    display: none;
+}
+
+
+@keyframes spin {
+    0% {
+        transform: rotate(0deg);
+    }
+
+    100% {
+        transform: rotate(360deg);
+    }
+}
+
+.intro {
+    height: 110vh;
+    background-image: linear-gradient(180deg, black, rgba(0, 0, 0, 0)), url('/static/surshastra_bg.gif');
+    background-size: cover;
+}
+
+.sample {
+    height: 10px;
+}
+
+nav .navbar {
+    display: flex;
+    justify-content: end;
+    margin: 20px 80px 0px 0px;
+}
+
+nav .navbar li {
+    display: flex;
+}
+
+nav .navbar li ul a {
+    text-decoration: none;
+    color: aliceblue;
+    margin-left: 25px;
+    font-family: sans-serif;
+    font-size: 18px;
+}
+
+.logo {
+    margin: 20px auto 0px auto;
+    display: flex;
+    justify-content: center;
+}
+
+.logo img {
+    width: 400px;
+}
+
+.text h3 {
+    font-family: Verdana, Geneva, Tahoma, sans-serif;
+    color: rgb(255, 255, 255);
+    font-size: 55px;
+    text-align: center;
+    margin-top: -20px;
+}
+
+.text h4 {
+    z-index: 2;
+    font-family: sans-serif;
+    color: rgb(255, 255, 255);
+    font-size: 30px;
+    text-align: center;
+    margin-top: -35px;
+}
+
+a {
+    text-decoration: none;
+}
+
+button.transcribe {
+    background-color: rgb(0, 187, 0);
+    border: none;
+    cursor: pointer;
+    width: 250px;
+    height: 50px;
+    display: block;
+    margin: 20px auto;
+    border: 2px solid white;
+}
+
+.transcribe span {
+    color: white;
+    font-size: 20px;
+}
+
+#about {
+    height: 100vh;
+    background-color: rgb(212, 217, 227);
+}
+
+#about h3,
+#working h3 {
+    color: rgb(61, 59, 78);
+    text-align: center;
+    margin: 50px auto 50px auto;
+    font-size: 35px;
+    font-family: Verdana, Geneva, Tahoma, sans-serif;
+}
+
+#about p,
+#working p {
+    color: rgb(46, 48, 50);
+    font-family: Arial, Helvetica, sans-serif;
+    width: 80%;
+    margin: 0px auto;
+    text-align: center;
+    font-size: 18px;
+    line-height: 1.8em;
+}
+
+#about img {
+    width: 1000px;
+    opacity: 50%;
+    margin-top: -200px;
+}
+
+#working {
+    height: 100vh;
+    background-color: rgb(212, 217, 227);
+}
+
+.items {
+    display: flex;
+    align-items: center;
+    padding: 10px;
+}
+
+.items img {
+    width: 80px;
+}
+
+#transcribe-music {
+    height: 100vh;
+    background-color: #47495A;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+#transcribe-music img {
+    width: 700px;
+}
+
+.input-box {
+    color: white;
+    height: 60vh;
+    width: 600px;
+    margin: auto;
+    background-color: rgb(36, 36, 36);
+    border-radius: 10px;
+    text-align: center;
+    box-shadow: 0px 0px 8px rgb(0, 229, 255);
+}
+
+.input-box h3 {
+    color: white;
+    font-family: sans-serif;
+    font-size: 30px;
+    padding-top: 20px;
+}
+
+.input-file {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 500px;
+    margin: 50px auto;
+    font-family: sans-serif;
+    border: 1px dashed white;
+    background-color: rgb(31, 30, 30);
+    border-radius: 5px;
+    padding: 20px;
+}
+
+.input-file h5 {
+    margin-bottom: 10px;
+    font-size: 15px;
+}
+
+.file-label {
+    display: inline-block;
+    padding: 10px 20px;
+    background-color: rgba(255, 255, 255, 0.3);
+    color: white;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    font-size: 12px;
+    margin-bottom: 20px;
+}
+
+.file-label:hover {
+    background-color: rgba(255, 255, 255, 0.5);
+}
+
+.file-label input[type="file"] {
+    display: none;
+}
+
+input[type="submit"] {
+    background-color: rgb(0, 187, 0);
+    border: none;
+    cursor: pointer;
+    padding: 10px 40px;
+    color: white;
+    font-family: sans-serif;
+    font-size: 18px;
+    display: block;
+    margin: 30px auto 0px auto;
+    border-radius: 5px;
+}
+
+#contact {
+    text-align: center;
+}
+
+#contact h3 {
+    text-align: center;
+    font-size: 25px;
+    padding: 10px;
+    margin: 0px;
+}
+
+.socials {
+    margin: 10px auto 18px auto;
+    width: 150px;
+    display: flex;
+    justify-content: space-between;
+    cursor: pointer;
+}

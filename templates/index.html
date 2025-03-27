@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Surshastra</title>
+    <link rel="stylesheet" href="/static/index.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.0/css/all.min.css">
+</head>
+
+<body>
+
+    <div id="loading">
+        <div class="spinner"></div>
+        <h2>Processing your audio...</h2>
+    </div>
+
+    <div class="intro">
+        <div class="sample"></div>
+        <nav>
+            <div class="navbar">
+                <li>
+                    <ul><a href="#working">Working</a></ul>
+                    <ul><a href="#about">About</a></ul>
+                    <ul><a href="#contact">Contact Us</a></ul>
+                </li>
+            </div>
+        </nav>
+        <div class="logo">
+            <img src="/static/logo2.png" alt="Surshastra Logo">
+        </div>
+        <div class="text">
+            <h3>Listen. Transcribe. Compose</h3>
+            <h4>Turn Your Melodies into Music Sheets Instantly!</h4>
+        </div>
+        <a href="#transcribe-music">
+            <button class="transcribe">
+                <span>Transcribe Music</span>
+                &nbsp;
+                <i class="fas fa-arrow-circle-right" style="color: white; font-size: 20px;"></i>
+            </button>
+        </a>
+    </div>
+    <div id="about">
+        <div style="height: 10vh;"></div>
+        <h3>What is SurShastra?</h3>
+        <p>
+            Welcome To Surshastra, Where We Believe In Empowering Musicians Through Technology. Our Mission Is To
+            Provide A Platform That Fosters Creativity And Understanding In The World Of Music Composition And
+            Performance.
+            <br>
+            <br>
+            At Surshastra, We Understand The Challenges That Musicians Face When Trying To Compose Or Interpret Songs.
+            That's Why We've Developed An Innovative Note Analysis Tool To Simplify The Process. Our Application Offers
+            A Comprehensive Solution For Musicians Of All Levels, Whether You're A Seasoned Professional Or Just
+            Starting Your Musical Journey.
+            <br>
+            <br>
+            With Our Note Analysis Feature, You Can Easily Decipher The Intricate Elements Of Any Song, From Melodies To
+            Chords And Everything In Between. Gone Are The Days Of Struggling To Figure Out The Correct Notes By Ear -
+            Our Technology Does The Hard Work For You, Allowing You To Focus On What Truly Matters: Expressing Your
+            Creativity.
+        </p>
+
+    </div>
+    <div id="working">
+        <div style="height: 10vh;"></div>
+        <h3>How does SurShastra Work?</h3>
+        <div style="display: flex;">
+            <div style="width: 50%;">
+                <p>
+                    The Surshastra website is a platform designed for music enthusiasts and professionals to interact
+                    with audio files in a musical context. Users can upload .wav audio files to the website, where the
+                    files are analyzed using advanced audio processing techniques, including Constant-Q Transform (CQT)
+                    and onset detection for rhythm analysis. Additionally, users can download the processed data in
+                    various formats, including MusicXML, MIDI, and sheet music, allowing for further exploration and
+                    utilization of the musical content.
+                </p>
+            </div>
+            <div style="width: 50%;">
+                <div class="items">
+                    <img src="/static/signal.png">
+                    <p style="font-size: 15px; text-align: left;">Signal processing techniques are employed to analyze
+                        the spectral and rhythmic characteristics of audio files</p>
+                </div>
+                <div class="items">
+                    <img src="/static/librosa.png">
+                    <p style="font-size: 15px; text-align: left;">Librosa library is leveraged for audio loading, CQT
+                        computation, and onset detection, enabling robust audio processing functionalities</p>
+                </div>
+                <div class="items">
+                    <img src="/static/musescore.png">
+                    <p style="font-size: 15px; text-align: left;">Musescore can be utilized to view and interact with
+                        the processed musical data, enabling users to have a better understanding</p>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div id="transcribe-music">
+        <div style="width: 50%;">
+            <img src="/static/notes2.png" width="500">
+        </div>
+        <div>
+            <div class="input-box">
+                <h3>Transcribe your music!</h3>
+                <form action="/upload" method="post" enctype="multipart/form-data">
+                    <div class="input-file">
+                        <div>
+                            <i class="fa-solid fa-cloud-arrow-up"
+                                style="font-size: 70px; color: skyblue; margin-right: 30px;"></i>
+                        </div>
+                        <div>
+                            <h5>Enter the file in .wav format</h5>
+                            <label for="file-upload" class="file-label">
+                                <span>Choose File</span>
+                                <input type="file" id="file-upload" name="file-upload" style="display: none;"
+                                    accept=".wav" onchange="updateFileName()">
+                            </label>
+                            <div id="selected-file"></div>
+                        </div>
+                    </div>
+                    <input type="submit" value="Upload">
+                </form>
+            </div>
+        </div>
+    </div>
+    <div id="contact" style="height: 25vh; color: white;background-color: rgb(31, 34, 45);">
+        <h3>Follow our Socials</h3>
+        <div class="socials">
+            <i class="fa-brands fa-square-facebook" style="font-size: 36px;"></i>
+            <i class="fa-brands fa-instagram" style="font-size: 36px;"></i>
+            <i class="fa-brands fa-square-twitter" style="font-size: 36px;"></i>
+        </div>
+        <div style="margin-top: 30px;">
+            <i class="fa-regular fa-copyright"></i>
+            <span>2024 SurShastra. All Rights Reserved</span>
+        </div>
+    </div>
+    <script>
+        function updateFileName() {
+            const fileInput = document.getElementById('file-upload');
+            const fileName = document.getElementById('selected-file');
+            fileName.textContent = fileInput.files[0].name;
+        }
+
+        document.addEventListener('DOMContentLoaded', function () {
+            const form = document.querySelector('form');
+
+            form.addEventListener('submit', function (event) {
+                const loadingDiv = document.querySelector('#loading');
+                loadingDiv.style.display = 'flex';
+                loadingDiv.scrollIntoView({ behavior:'smooth', block: 'start' });
+            });
+        });
+
+    </script>
+</body>
+
+</html>
